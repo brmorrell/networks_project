@@ -16,7 +16,7 @@ social_off_data = social_data(15:end,:);
 num_t=size(trans_data,1);
 num_sn=size(social_on_data,1);
 num_sf=size(social_off_data,1);
-
+%{
 %Box & Whisker plots for each algorithm
 for i=[1,2,3,4]
     C = [trans_data(:,6+i)' social_on_data(:,6+i)' social_off_data(:,6+i)'];
@@ -166,7 +166,7 @@ hold on;
 xlabel('Category');
 ylabel('Mean AMI');
 title("AMI Aggregates");
-
+%}
 
 %Number of communities vs number of nodes/edges
 color_list = [[0 0.4470 0.7410];
@@ -205,17 +205,17 @@ for i=[1,2,3,4]
     parts2 = social_on_data(:,2+i)';
     parts3 = social_off_data(:,2+i)';
 
-    edges1 = trans_data(:,2)';
-    edges2 = social_on_data(:,2)';
-    edges3 = social_off_data(:,2)';
+    edges1 = trans_data(:,1)';
+    edges2 = social_on_data(:,1)';
+    edges3 = social_off_data(:,1)';
 
-    scatter([edges1 edges2 edges3],[parts1 parts2 parts3],[],color_list(i,:),'filled');
+    scatter([edges1 nodes2 nodes3],[parts1 parts2 parts3],[],color_list(i,:),'filled');
     hold on;
 end
 
 xl = xlim;
 fplot(@(x) sqrt(x),[xl(1) xl(2)],'Color','k');
-xlabel('Total Edges');
+xlabel('Total Nodes');
 ylabel('Number of Communities');
 title("Detected Community Size");
 legend("Louvain", "Karrer-Newman", "Newman-Reinert", "Infomap");
