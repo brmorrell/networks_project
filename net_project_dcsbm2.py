@@ -12,6 +12,8 @@ import numpy as np
 import pandas as pd
 from math import isqrt
 import csv
+import project_inference
+import project_hists
 
 
 mypath = sys.argv[1]
