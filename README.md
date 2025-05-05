@@ -4,4 +4,4 @@ To run the code, call ```net_project_dcsbm.py transport-nets``` or ```net_projec
 
 ```project_hists.py``` contains the code to output data for us in matlab.
 
-```project_plots.m``` makes all the figures.
+```plots_project.m``` makes all the figures.
