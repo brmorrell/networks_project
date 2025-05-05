@@ -12,6 +12,8 @@ import numpy as np
 import pandas as pd
 from math import isqrt
 import csv
+import project_inference
+import project_hists
 
 
 mypath = sys.argv[1]
@@ -105,8 +107,8 @@ for f in onlyfiles:
         Output per-network info and AMI
         '''
         
-        project_hists.outputNetStats(str(dir),n,m,partitions,modularities)
-        project_hists.outputAMI(str(dir),labels)
+        project_hists.outputNetStats(str(f),n,m,partitions,modularities)
+        project_hists.outputAMI(str(f),labels)
         
         
         
