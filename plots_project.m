@@ -1,7 +1,6 @@
 table1_raw = readtable('output/net_stats.csv');
 table2_raw = readtable('output/ami_vals.csv');
 
-
 t1_labels = convertCharsToStrings(table2array(table1_raw(:,1)));
 t1_data = table2array(table1_raw(:,2:end));
 
@@ -23,7 +22,7 @@ for i=[1,2,3,4]
     grp = [repmat(["Transportation"],num_t,1)' repmat(["Social (Online)"], ...
         num_sn,1)' repmat(["Social (Offline)"],num_sf,1)'];
     
-    figure(i);
+    fig = figure(i);
     plot1 = boxplot(C,grp);
     hold on;
     xlabel('Category');
@@ -33,6 +32,7 @@ for i=[1,2,3,4]
         "Modularity Distributions (Newman-Reinert)",
         "Modularity Distributions (Infomap)"];
     title(title_strings(i));
+    fontsize(fig,scale=1.5);
 end
 
 
@@ -47,7 +47,7 @@ for i=[1,2,3,4]
     parts2 = social_on_data(:,2+i)';
     parts3 = social_off_data(:,2+i)';
 
-    figure(4+i);
+    fig = figure(4+i);
     scatter(parts1,mods1,'filled');
     hold on;
     scatter(parts2,mods2,'filled');
@@ -66,6 +66,13 @@ for i=[1,2,3,4]
     legend('Location','northeastoutside');
     R = corrcoef([parts1 parts2 parts3],[mods1 mods2 mods3]);
     R(1,2)
+    R1 = corrcoef(parts1,mods1);
+    R1(1,2)
+    R2 = corrcoef(parts2,mods2);
+    R2(1,2)
+    R3 = corrcoef(parts3,mods3);
+    R3(1,2)
+    fontsize(fig,scale=1.5);
 end
 
 
@@ -78,7 +85,7 @@ edges_t = trans_data(:,2)';
 edges_sn = social_on_data(:,2)';
 edges_sf = social_off_data(:,2)';
 
-figure(9);
+fig = figure(9);
 scatter(nodes_t,edges_t,'filled');
 hold on;
 scatter(nodes_sn,edges_sn,'filled');
@@ -92,6 +99,7 @@ ylabel('Number of Edges');
 title("Size of Networks");
 legend("Transportation", "Social (Online)", "Social (Offline)");
 legend('Location','northeastoutside');
+fontsize(fig,scale=1.5);
 
 %Average degree vs modularity
 for i=[1,2,3,4]
@@ -103,7 +111,7 @@ for i=[1,2,3,4]
     meank2 = edges_sn./nodes_sn;
     meank3 = edges_sf./nodes_sf;
 
-    figure(9+i);
+    fig = figure(9+i);
     scatter(meank1,mods1,'filled');
     hold on;
     scatter(meank2,mods2,'filled');
@@ -122,6 +130,7 @@ for i=[1,2,3,4]
     legend('Location','northeastoutside');
     R = corrcoef([meank1 meank2 meank3],[mods1 mods2 mods3]);
     R(1,2)
+    fontsize(fig,scale=1.5);
 end
 
 
@@ -146,10 +155,11 @@ social_off_ami_matrix = reshape(mean(social_off_ami),4,4);
 total_ami_matrix = reshape(mean([trans_ami;social_on_ami;social_off_ami]),4,4);
 
 %AMi heatmap
-figure(14);
+fig = figure(14);
 heatmap(total_ami_matrix,'XData',["Louvain" "KN" "NR" "Infomap"], ...
     'YData',["Louvain" "KN" "NR" "Infomap"]);
-
+title("Average Pairwise AMI")
+fontsize(fig,scale=1.5);
 
 %AMI means
 trans_ami_sums = (sum(trans_ami,2)-4)./12;
@@ -160,13 +170,13 @@ C2 = [trans_ami_sums' social_on_ami_sums' social_off_ami_sums'];
 grp2 = [repmat(["Transportation"],num_t2,1)' repmat(["Social (Online)"], ...
         num_sn2,1)' repmat(["Social (Offline)"],num_sf2,1)'];
 
-figure(15);
+fig = figure(15);
 boxplot(C,grp);
 hold on;
 xlabel('Category');
 ylabel('Mean AMI');
 title("AMI Aggregates");
-
+fontsize(fig,scale=1.5);
 
 %Number of communities vs number of nodes/edges
 color_list = [[0 0.4470 0.7410];
@@ -174,7 +184,7 @@ color_list = [[0 0.4470 0.7410];
     [0.4940 0.1840 0.5560];
     [0.4660 0.6740 0.1880]
     ];
-figure(16);
+fig = figure(16);
 
 for i=[1,2,3,4]
     parts1 = trans_data(:,2+i)';
@@ -198,8 +208,9 @@ legend("Louvain", "Karrer-Newman", "Newman-Reinert", "Infomap");
 legend('Location','northeastoutside');
 set(gca,'xscale','log');
 set(gca,'yscale','log');
+fontsize(fig,scale=1.5);
 
-figure(17);
+fig = figure(17);
 for i=[1,2,3,4]
     parts1 = trans_data(:,2+i)';
     parts2 = social_on_data(:,2+i)';
@@ -222,3 +233,42 @@ legend("Louvain", "Karrer-Newman", "Newman-Reinert", "Infomap");
 legend('Location','northeastoutside');
 set(gca,'xscale','log');
 set(gca,'yscale','log');
+fontsize(fig,scale=1.5);
+
+
+fig = figure(18);
+Xs = [];
+for i=[1,2,3,4]
+    parts1 = trans_data(:,2+i)';
+    parts2 = social_on_data(:,2+i)';
+    parts3 = social_off_data(:,2+i)';
+    xs = [parts1 parts2 parts3];
+    Xs = [Xs;xs];
+end
+hist(Xs');
+
+xlabel('Frequency');
+ylabel('Number of Communities');
+title("Histogram (with Infomap)");
+legend("Louvain", "Karrer-Newman", "Newman-Reinert", "Infomap");
+legend('Location','northeastoutside');
+fontsize(fig,scale=1.5);
+
+fig = figure(19);
+Xs = [];
+for i=[1,2,3]
+    parts1 = trans_data(:,2+i)';
+    parts2 = social_on_data(:,2+i)';
+    parts3 = social_off_data(:,2+i)';
+    xs = [parts1 parts2 parts3];
+    Xs = [Xs;xs];
+end
+hist(Xs');
+
+xlabel('Frequency');
+ylabel('Number of Communities');
+title("Histogram (without Infomap)");
+legend("Louvain", "Karrer-Newman", "Newman-Reinert");
+legend('Location','northeastoutside');
+fontsize(fig,scale=1.5);
+
